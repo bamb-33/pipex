@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:56:52 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/10 15:50:54 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/10 19:25:25 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,21 @@
 # include <unistd.h>
 # include "Libft/libft.h"
 
+//strjoin_extra
 char	*strjoin_extra(char const *s1, char const *s2, char c);
-char	*look_for_path(char *cmd);
+
+//path_finder
+char	*look_for_path(char *cmd, int flag);
+
+//read_file
+char	*read_file(int fd);
+
+//paths/*.c
+char	**first(void);
+char	**second(void);
+char	**third(void);
+char	**fourth(void);
+char	**fifth(void);
+char	**sixth(void);
 
 #endif

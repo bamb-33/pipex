@@ -5,22 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 17:17:43 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/07 09:49:03 by naadou           ###   ########.fr       */
+/*   Created: 2023/11/23 11:04:13 by naadou            #+#    #+#             */
+/*   Updated: 2024/01/10 20:16:23 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-// size_t	ft_strlen(const char *s)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (s[i])
-// 		i++;
-// 	return (i);
-// }
 
 static int	f(char **buffer, char **tmp)
 {
@@ -37,7 +27,7 @@ static int	f(char **buffer, char **tmp)
 				*tmp = ft_substr1(*buffer, 0, j + 1);
 				if (!(*tmp))
 					return (0);
-				*buffer = (char *)ft_realloc (j, (*buffer), ft_strlen(*buffer));
+				*buffer = (char *)ft_realloc(j, (*buffer), ft_strlen(*buffer));
 				if (!(*buffer))
 				{
 					free(*tmp);
@@ -83,12 +73,12 @@ static int	allocation(char **tmp, int fd)
 {
 	if (BUFFER_SIZE + 1 < 0 || fd == -1 || BUFFER_SIZE > INT_MAX)
 		return (0);
-	*tmp = (char *) malloc (sizeof(char) * (BUFFER_SIZE + 1));
+	*tmp = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!(*tmp))
 		return (0);
 	if (read(fd, *tmp, 0) == -1)
 	{
-		free (*tmp);
+		free(*tmp);
 		return (0);
 	}
 	(*tmp)[BUFFER_SIZE] = 0;
@@ -97,7 +87,7 @@ static int	allocation(char **tmp, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[256];
 	char		*tmp;
 	int			i;
 
@@ -105,18 +95,18 @@ char	*get_next_line(int fd)
 		return (NULL);
 	while (1)
 	{
-		i = f(&buffer, &tmp);
+		i = f(&buffer[fd], &tmp);
 		if (i == 1)
 			return (tmp);
 		else if (i == 0)
 			return (NULL);
 		i = read(fd, tmp, BUFFER_SIZE);
-		if (i == 0 && !buffer)
+		if (i == 0 && !buffer[fd])
 		{
 			free(tmp);
 			return (NULL);
 		}
-		i = f1(&buffer, &tmp, i);
+		i = f1(&buffer[fd], &tmp, i);
 		if (i == 1)
 			return (tmp);
 		else if (i == 0)

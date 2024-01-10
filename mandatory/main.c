@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:41:37 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/10 17:49:28 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/10 20:33:20 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,39 @@ char	**ft_get_command(int ac, char **av)
 
 int	main(int ac, char *av[])
 {
-	int		fd;
-	char	*tmp;
-	char	*infile;
-	char	*outfile;
+	int		i;
 	char	**commands;
 	char	*path;
-	char	**cmd_param;
+	int		fd;
+	char	*infile;
+	char	*outfile;
 	char	*cmd;
+	char	**cmd_param;
 
 	if (ac == 1)
 		return (0);
 	infile = NULL;
+	path = NULL;
 	commands = ft_get_command(ac, av);
-	fd = open(commands[0], O_RDONLY);
-	tmp = get_next_line(fd);
-	while (tmp)
-	{
-		infile = ft_strjoin(infile, tmp);
-		tmp = get_next_line(fd);
-	}
-	path = look_for_path(commands[1]);
 
+	
+	i = 0;
+	while (i < 6)
+	{
+		path = look_for_path(commands[1], i);
+		if (path)
+			break ;
+		i++;
+	}
+	if (path == 0)
+		exit(1);
+	fd = open(commands[0], O_RDONLY);
+	if (fd == -1)
+	{
+		printf("fd wasn't opened succefully");
+		exit(1);
+	}
+	infile = read_file(fd);
 	cmd = ft_strjoin(path, commands[1]);
 	cmd_param = (char **) malloc (sizeof(char *) * 3);
 	cmd_param[0] = cmd;

@@ -1,7 +1,9 @@
 CC = cc
 CFLAGS = 
 
-SRC = mandatory/main.c mandatory/strjoin_extra.c mandatory/path_finder.c
+SRC = mandatory/main.c mandatory/strjoin_extra.c mandatory/path_finder.c mandatory/read_file.c\
+		mandatory/paths/first.c mandatory/paths/second.c mandatory/paths/third.c \
+		mandatory/paths/fourth.c mandatory/paths/fifth.c mandatory/paths/sixth.c 
 
 SRC_B = 
 
