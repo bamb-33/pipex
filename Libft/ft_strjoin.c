@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 19:17:25 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/10 13:33:42 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/10 22:28:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,7 @@ static char	*ft_put(char *p, char const *s1, char const *s2)
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*p;
-	int		i;
-	int		j;
 
-	i = 0;
-	j = 0;
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)

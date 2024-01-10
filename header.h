@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   header.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:56:52 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/10 19:25:25 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/10 22:24:10 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,9 @@ char	**third(void);
 char	**fourth(void);
 char	**fifth(void);
 char	**sixth(void);
+
+//exexute
+char	**get_execve_params(char *cmd, char *infile);
+void	execute_command(char **commands, char *infile);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_finder.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:09:29 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/10 19:27:44 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/10 22:22:45 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ char	*look_for_path(char *cmd, int flag)
 	if (p == 0)
 	{
 		close(fd[0]);
-		int original_stdout = dup(STDOUT_FILENO);
 		dup2(fd[1], STDOUT_FILENO);
 		execve ("/bin/ls", directories, NULL);
 	}

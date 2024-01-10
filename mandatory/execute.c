@@ -3,41 +3,77 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 20:35:45 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/10 20:38:52 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/10 22:30:00 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../header.h"
 
-void	execute_command()
+char	**get_execve_params(char *cmd, char *infile)
 {
-	//make this work here and make shorter for the norminate and add the while loop (static var < ac - 3)
-	i = 0;
-	while (i < 6)
+	char	**strs;
+
+	strs = (char **) malloc (sizeof(char *) * 3);
+	strs[0] = cmd;
+	strs[1] = infile;
+	strs[2] = NULL;
+	return (strs);
+}
+
+void	execute_command(char **commands, char *infile)
+{
+	static int	i;
+	int			j;
+	char  		*output;
+	char  		*path;
+	char  		*cmd;
+	char  		**execve_params;
+	int			fd[2];
+	pid_t		p;
+
+	if (!i)
+		i = 1;
+	j = 0;
+	while (j < 6)
 	{
-		path = look_for_path(commands[1], i);
+		path = look_for_path(commands[i], i);
 		if (path)
 			break ;
-		i++;
+		j++;
 	}
 	if (path == 0)
 		exit(1);
-	fd = open(commands[0], O_RDONLY);
-	if (fd == -1)
+	cmd = ft_strjoin(path, commands[i]);
+	execve_params = get_execve_params(cmd, infile);
+	while (commands[i + 1])
 	{
-		printf("fd wasn't opened succefully");
-		exit(1);
+		if (pipe(fd) == -1)
+		{
+			printf("\nError: Could not create a pipe!\n");
+			exit(-1);
+		}
+		p = fork();
+		if (p == -1)
+		{
+			printf("\nError: Could not fork!\n");
+			exit(-1);
+		}
+		if (p == 0)
+		{
+			close(fd[0]);
+			dup2(fd[1], STDOUT_FILENO);
+			execve(cmd, execve_params, NULL);
+		}
+		else
+		{
+			close(fd[1]);
+			wait(NULL);
+			output = read_file(fd[0]);
+			execute_command(commands, output);
+		}
 	}
-	infile = read_file(fd);
-	cmd = ft_strjoin(path, commands[1]);
-	cmd_param = (char **) malloc (sizeof(char *) * 3);
-	cmd_param[0] = cmd;
-	cmd_param[1] = infile;
-	cmd_param[2] = NULL;
-
 	//eventually call a function that will run the final cmd with output of the final - 1 command 
-	execve(cmd, cmd_param, NULL);
 }

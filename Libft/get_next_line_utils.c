@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 11:54:47 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/06 09:59:24 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/10 22:28:42 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,7 @@ static char	*glue(char *s1, char *s2, char *p, int len_read)
 char	*ft_strjoin1(char *s1, char *s2, int len_read)
 {
 	char	*p;
-	int		i;
-	int		j;
 
-	i = 0;
-	j = 0;
 	if (!s1)
 		return (ft_strdup1(s2, len_read));
 	p = (char *) malloc ((ft_strlen(s1) + len_read + 1) * sizeof(char));
