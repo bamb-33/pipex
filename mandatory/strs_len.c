@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   third.c                                            :+:      :+:    :+:   */
+/*   strs_len.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/10 19:08:53 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/10 19:13:30 by naadou           ###   ########.fr       */
+/*   Created: 2024/01/11 10:40:19 by naadou            #+#    #+#             */
+/*   Updated: 2024/01/11 11:19:30 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../header.h"
+#include "../header.h"
 
-char	**third(void)
+size_t strs_len(char **strs)
 {
-	char **strs;
+	size_t	i;
 
-	strs = (char **) malloc (3 * sizeof(char *));
-	strs[0] = "/bin/ls";
-	strs[1] = "/usr/bin/";
-	strs[2] = NULL;
-	return (strs);
+	i = 0;
+	while (strs[i])
+		i++;
+	return (i);
 }

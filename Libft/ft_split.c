@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 11:18:02 by naadou            #+#    #+#             */
-/*   Updated: 2023/11/17 15:35:23 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/11 20:09:59 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static char	*ft_strdupv2(const char *s1, char c)
 	int		i;
 
 	slen = ft_strlenv2(s1, c);
-	scpy = (char *) malloc ((slen + 1) * sizeof(char));
+	scpy = (char *) malloc ((slen + 2) * sizeof(char));
 	if (!scpy)
 		return (NULL);
 	i = 0;
@@ -53,7 +53,8 @@ static char	*ft_strdupv2(const char *s1, char c)
 		scpy[i] = s1[i];
 		i++;
 	}
-	scpy[i] = 0;
+	scpy[i] = '/';
+	scpy[i + 1] = 0;
 	return (scpy);
 }
 
