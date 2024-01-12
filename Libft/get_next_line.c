@@ -6,36 +6,32 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:04:13 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/10 20:16:23 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/12 21:50:39 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	f(char **buffer, char **tmp)
+static int	f(char **buffer, char **tmp, char *limiter)
 {
 	int	j;
 
 	j = 0;
 	if (*buffer)
 	{
-		while ((*buffer)[j])
+		if (ft_strnstr(*buffer, limiter, ft_strlen(*buffer)) == 1)
 		{
-			if ((*buffer)[j] == '\n')
+			free(*tmp);
+			*tmp = ft_substr1(*buffer, 0, j + 1);
+			if (!(*tmp))
+				return (0);
+			*buffer = (char *)ft_realloc(j, (*buffer), ft_strlen(*buffer));
+			if (!(*buffer))
 			{
 				free(*tmp);
-				*tmp = ft_substr1(*buffer, 0, j + 1);
-				if (!(*tmp))
-					return (0);
-				*buffer = (char *)ft_realloc(j, (*buffer), ft_strlen(*buffer));
-				if (!(*buffer))
-				{
-					free(*tmp);
-					return (0);
-				}
-				return (1);
+				return (0);
 			}
-			j++;
+			return (1);
 		}
 	}
 	return (-1);
@@ -85,7 +81,7 @@ static int	allocation(char **tmp, int fd)
 	return (-1);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, char *limiter)
 {
 	static char	*buffer[256];
 	char		*tmp;
@@ -95,7 +91,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	while (1)
 	{
-		i = f(&buffer[fd], &tmp);
+		i = f(&buffer[fd], &tmp, limiter);
 		if (i == 1)
 			return (tmp);
 		else if (i == 0)

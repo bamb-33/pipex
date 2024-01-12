@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/01 19:17:25 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/10 22:28:47 by marvin           ###   ########.fr       */
+/*   Updated: 2024/01/12 15:57:43 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static char	*ft_put(char *p, char const *s1, char const *s2)
+static char	*ft_put(char *p, char const *s1, char const *s2, char c)
 {
 	int	i;
 	int	j;
@@ -26,27 +26,32 @@ static char	*ft_put(char *p, char const *s1, char const *s2)
 		p[i] = s1[i];
 		i++;
 	}
+	p[i] = c;
 	while (s2[j])
 	{
-		p[i + j] = s2[j];
+		p[i + j + 1] = s2[j];
 		j++;
 	}
-	p[i + j] = 0;
+	p[i + j + 1] = 0;
 	return (p);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char const *s1, char const *s2, char c)
 {
 	char	*p;
+	int		i;
+	int		j;
 
+	i = 0;
+	j = 0;
 	if (!s1 && !s2)
 		return (NULL);
 	if (!s1)
 		return (ft_strdup(s2));
 	if (!s2)
 		return (ft_strdup(s1));
-	p = (char *) malloc ((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	p = (char *) malloc ((ft_strlen(s1) + ft_strlen(s2) + 2) * sizeof(char));
 	if (p == NULL)
 		return (NULL);
-	return (ft_put(p, s1, s2));
+	return (ft_put(p, s1, s2, c));
 }
