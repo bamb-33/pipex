@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 19:59:06 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/13 19:19:33 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/13 19:50:04 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ int	main(int ac, char *av[], char **envp)
 	}
 	fds = ft_open(av, ac);
 	ft_pipex(av, envp, fds[0], fds[1]);
+	if (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0)
+		last_child_p(0, 1, "rm file", envp);
 	close(fds[1]);
 	wait(0);
 	return (0);

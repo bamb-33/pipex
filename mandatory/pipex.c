@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:41:37 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/13 17:04:27 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/13 19:58:36 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	ft_pipex(char **av, char **envp, int f1, int f2)
 		child_p(f1, end, av[2], envp);
 	close(end[1]);
 	last_child_p(end[0], f2, av[3], envp);
+	close(end[0]);
 }
 
 int	main(int ac, char *av[], char **envp)
