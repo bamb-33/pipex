@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:04:13 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/12 21:50:39 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/13 09:29:17 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,11 @@
 
 static int	f(char **buffer, char **tmp, char *limiter)
 {
-	int	j;
-
-	j = 0;
 	if (*buffer)
 	{
 		if (ft_strnstr(*buffer, limiter, ft_strlen(*buffer)) == 1)
 		{
 			free(*tmp);
-			*tmp = ft_substr1(*buffer, 0, j + 1);
-			if (!(*tmp))
-				return (0);
-			*buffer = (char *)ft_realloc(j, (*buffer), ft_strlen(*buffer));
-			if (!(*buffer))
-			{
-				free(*tmp);
-				return (0);
-			}
 			return (1);
 		}
 	}
@@ -67,7 +55,7 @@ static int	f1(char **buffer, char **tmp, int i)
 
 static int	allocation(char **tmp, int fd)
 {
-	if (BUFFER_SIZE + 1 < 0 || fd == -1 || BUFFER_SIZE > INT_MAX)
+	if (BUFFER_SIZE + 1 < 0 || fd == -1 || BUFFER_SIZE + 1 > INT_MAX)
 		return (0);
 	*tmp = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	if (!(*tmp))
@@ -93,7 +81,7 @@ char	*get_next_line(int fd, char *limiter)
 	{
 		i = f(&buffer[fd], &tmp, limiter);
 		if (i == 1)
-			return (tmp);
+			return (buffer[fd]);
 		else if (i == 0)
 			return (NULL);
 		i = read(fd, tmp, BUFFER_SIZE);

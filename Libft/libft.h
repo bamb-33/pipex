@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/04 16:09:35 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/12 21:50:49 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/13 09:23:38 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #  define BUFFER_SIZE 1
 # endif
 
+# include <stdio.h>
 # include <stddef.h>
 # include <fcntl.h>
 # include <stddef.h>
