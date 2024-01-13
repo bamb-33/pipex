@@ -7,20 +7,24 @@ SRC_B = bonus/pipex_bonus.c utlis.c
 
 OBJ = $(SRC:.c=.o)
 OBJ_B = $(SRC_B:.c=.o)
+LIBFT = libft.a
 NAME = pipex
 BONUS = pipex_b
 
 all: $(NAME)
+
 bonus: $(BONUS)
 
-$(NAME): $(OBJ)
+$(LIBFT):
+	$(MAKE) -C libft
+
+$(NAME): $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ) libft/libft.a -o $(NAME)
 
-$(BONUS): $(OBJ_B)
+bonus: $(OBJ_B) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ_B) libft/libft.a -o $(BONUS)
 
 %.o: %.c
-	$(MAKE) -C libft
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

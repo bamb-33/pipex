@@ -20,14 +20,11 @@ all: $(NAME)
 $(NAME): $(OFILES)
 	ar rcs $(NAME) $(OFILES)
 
-$(OFILES): $(FILES)
-	$(CC) $(CFLAGS) -c $^
-
 bonus: $(OBFILES)
 	ar rcs $(NAME) $(OBFILES)
 
-$(OBFILES): $(BFILES)
-	$(CC) $(CFLAGS) -c $^
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OFILES) $(OBFILES)
