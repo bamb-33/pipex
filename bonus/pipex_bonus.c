@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 19:59:06 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/13 19:50:04 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/14 20:44:17 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void	ft_pipex(char **av, char **envp, int f1, int f2)
 int	main(int ac, char *av[], char **envp)
 {
 	int	*fds;
+	int	fd;
+	int	status;
 
 	if (ac < 5)
 	{
@@ -94,10 +96,14 @@ int	main(int ac, char *av[], char **envp)
 		return (-1);
 	}
 	fds = ft_open(av, ac);
-	ft_pipex(av, envp, fds[0], fds[1]);
-	if (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0)
-		last_child_p(0, 1, "rm file", envp);
+	close(fds[0]);
+	fd = open ("file", O_RDONLY);
+	ft_pipex(av, envp, fd, fds[1]);
 	close(fds[1]);
-	wait(0);
+	free(fds);
+	unlink("file");
+	waitpid(0, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
 	return (0);
 }

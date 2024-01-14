@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:41:37 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/13 19:58:36 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/14 20:44:05 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,9 @@ void	cmd_excev(char *cmd, char **envp)
 	{
 		free_strs(argv);
 		free(path);
-		ft_putstr_fd("zsh: command not found: ", 2);
-		ft_putendl_fd(cmd, 2);
+		error_exit("zsh: command not found: ", cmd);
 		exit(EXIT_FAILURE);
 	}
-	exit(EXIT_FAILURE);
 }
 
 void	child_p(int fd, int *end, char *cmd, char **envp)
@@ -77,6 +75,7 @@ void	ft_pipex(char **av, char **envp, int f1, int f2)
 int	main(int ac, char *av[], char **envp)
 {
 	int	*fds;
+	int	status;
 
 	if (ac != 5)
 	{
@@ -87,6 +86,9 @@ int	main(int ac, char *av[], char **envp)
 	ft_pipex(av, envp, fds[0], fds[1]);
 	close(fds[0]);
 	close(fds[1]);
-	wait(0);
+	free (fds);
+	waitpid(0, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
 	return (0);
 }

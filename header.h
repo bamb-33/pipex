@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:56:52 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/13 20:16:20 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/14 20:43:34 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "Libft/libft.h"
+# include "libft/libft.h"
 
 void	free_strs(char **strs);
 void	error_exit(char *error, char *var);
