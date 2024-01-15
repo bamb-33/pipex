@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 19:59:06 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/14 20:44:17 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/15 13:22:10 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	cmd_excev(char *cmd, char **envp)
 		free_strs(argv);
 		free(path);
 		error_exit("zsh: command not found: ", cmd);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 }
 
