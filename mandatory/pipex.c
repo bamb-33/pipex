@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:41:37 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/15 13:22:50 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/16 19:25:28 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,17 @@ void	cmd_excev(char *cmd, char **envp)
 
 	argv = ft_split(cmd, ' ');
 	path = look_for_path(argv[0], envp);
+	if (access(arg, F_OK) == 0 && arg) // cheack if a file exist or nah
+	{
+		free (paths);
+		return (cmd_exec);
+	}
 	if (execve(path, argv, envp) == -1)
 	{
 		free_strs(argv);
 		free(path);
 		error_exit("zsh: command not found: ", cmd);
-		exit(127);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -86,9 +91,10 @@ int	main(int ac, char *av[], char **envp)
 	ft_pipex(av, envp, fds[0], fds[1]);
 	close(fds[0]);
 	close(fds[1]);
-	free (fds);
+	free(fds);
 	waitpid(0, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
+	printf("here\n");
 	return (0);
 }

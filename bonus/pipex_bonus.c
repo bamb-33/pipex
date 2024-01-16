@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 19:59:06 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/15 13:22:10 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/16 19:17:42 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	cmd_excev(char *cmd, char **envp)
 		free_strs(argv);
 		free(path);
 		error_exit("zsh: command not found: ", cmd);
-		exit(127);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -88,7 +88,6 @@ int	main(int ac, char *av[], char **envp)
 {
 	int	*fds;
 	int	fd;
-	int	status;
 
 	if (ac < 5)
 	{
@@ -96,14 +95,17 @@ int	main(int ac, char *av[], char **envp)
 		return (-1);
 	}
 	fds = ft_open(av, ac);
-	close(fds[0]);
-	fd = open ("file", O_RDONLY);
-	ft_pipex(av, envp, fd, fds[1]);
+	if (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0)
+	{
+		close(fds[0]);
+		fd = open ("file", O_RDONLY);
+		ft_pipex(av, envp, fd, fds[1]);
+	}
+	else
+		ft_pipex(av, envp, fds[0], fds[1]);
 	close(fds[1]);
 	free(fds);
+	wait(0);
 	unlink("file");
-	waitpid(0, &status, 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:09:29 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/15 13:23:37 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/16 19:23:27 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ void	free_strs(char **strs)
 
 void	error_exit(char *error, char *var)
 {
+	ft_putstr_fd("zsh: ", 2);
 	ft_putstr_fd(error, 2);
+	ft_putstr_fd(": ", 2);
 	ft_putendl_fd(var, 2);
 }
 
@@ -39,18 +41,27 @@ int	*ft_open(char **av, int ac)
 	fds = (int *) malloc (sizeof(int) * 2);
 	if (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0)
 	{
-		fds[0] = open ("file", O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (ac < 6)
+		{
+			ft_putendl_fd("invalid number of arguments", 2);
+			exit(EXIT_FAILURE);
+		}
+		fds[0] = open ("file", O_CREAT | O_RDWR, 0644);
+		write(1, "pipe heredoc> ", 14);
 		input = get_next_line(0, av[2]);
 		write(fds[0], input, ft_strlen(input) - ft_strlen(av[2]));
 		free (input);
+		fds[1] = open (av[ac - 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
 	}
 	else
+	{
 		fds[0] = open (av[1], O_RDONLY);
-	fds[1] = open (av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		fds[1] = open (av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	}
 	if (fds[0] < 0)
-		error_exit("zsh: no such file or directory: ", av[1]);
+		error_exit(strerror(errno), av[1]);
 	if (fds[1] < 0)
-		error_exit("zsh: no such file or directory: ", av[ac - 1]);
+		error_exit(strerror(errno), av[ac - 1]);
 	return (fds);
 }
 

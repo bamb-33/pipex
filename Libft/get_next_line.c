@@ -6,11 +6,17 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:04:13 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/13 09:29:17 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/14 15:09:04 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+
+void	print_sentence(char *str)
+{
+	if (str[0] == '\n')
+		ft_putstr_fd("pipe heredoc> ", 1);
+}
 
 static int	f(char **buffer, char **tmp, char *limiter)
 {
@@ -47,6 +53,7 @@ static int	f1(char **buffer, char **tmp, int i)
 		*buffer = NULL;
 		return (1);
 	}
+	print_sentence(*tmp);
 	*buffer = ft_strjoin1(*buffer, *tmp, i);
 	if (!(*buffer))
 		return (0);
