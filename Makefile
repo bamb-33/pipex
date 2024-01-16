@@ -10,9 +10,9 @@ SRC_LIBFT = libft/ft_isalpha.c libft/ft_isdigit.c libft/ft_isalnum.c libft/ft_is
 	   libft/ft_memcmp.c libft/ft_memchr.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_striteri.c \
 	   libft/get_next_line_utils.c libft/get_next_line.c
 
-SRC = mandatory/pipex.c utils.c
+SRC = mandatory/pipex.c utils.c utils2.c
 
-SRC_B = bonus/pipex_bonus.c utils.c
+SRC_B = bonus/pipex_bonus.c utils.c utils2.c
 
 OBJ = $(SRC:.c=.o)
 OBJ_B = $(SRC_B:.c=.o)

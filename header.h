@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:56:52 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/16 18:56:21 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/16 19:42:41 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,7 @@ void	error_exit(char *error, char *var);
 int		*ft_open(char **av, int ac);
 char	**ft_getenv(char **envp);
 char	*look_for_path(char *cmd, char **envp);
+
+int	file_existence(char **argv);
 
 #endif

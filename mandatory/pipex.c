@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 12:41:37 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/16 19:25:28 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/16 20:46:39 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,19 @@ void	cmd_excev(char *cmd, char **envp)
 
 	argv = ft_split(cmd, ' ');
 	path = look_for_path(argv[0], envp);
-	if (access(arg, F_OK) == 0 && arg) // cheack if a file exist or nah
-	{
-		free (paths);
-		return (cmd_exec);
-	}
 	if (execve(path, argv, envp) == -1)
 	{
 		free_strs(argv);
 		free(path);
-		error_exit("zsh: command not found: ", cmd);
-		exit(EXIT_FAILURE);
+		error_exit(strerror(errno), cmd);
+		exit(errno);
 	}
 }
 
 void	child_p(int fd, int *end, char *cmd, char **envp)
 {
+	if (fd < 0 || end[1] < 0)
+		exit (errno);
 	dup2(fd, STDIN_FILENO);
 	dup2(end[1], STDOUT_FILENO);
 	close (end[0]);
@@ -52,6 +49,8 @@ void	last_child_p(int f1, int f2, char *cmd, char **envp)
 		exit(-1);
 	if (!pid)
 	{
+		if (f1 < 0 || f2 < 0)
+			exit (-1);
 		dup2(f2, STDOUT_FILENO);
 		dup2(f1, STDIN_FILENO);
 		close (f1);
@@ -66,10 +65,10 @@ void	ft_pipex(char **av, char **envp, int f1, int f2)
 	pid_t	p;
 
 	if (pipe(end) == -1)
-		exit(-1);
+		exit(errno);
 	p = fork();
 	if (p < 0)
-		exit(-1);
+		exit(errno);
 	if (!p)
 		child_p(f1, end, av[2], envp);
 	close(end[1]);
@@ -95,6 +94,5 @@ int	main(int ac, char *av[], char **envp)
 	waitpid(0, &status, 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	printf("here\n");
 	return (0);
 }
