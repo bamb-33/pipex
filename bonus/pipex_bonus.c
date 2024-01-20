@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/12 19:59:06 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/16 19:17:42 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/20 18:27:29 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,24 @@ void	cmd_excev(char *cmd, char **envp)
 	char	*path;
 
 	argv = ft_split(cmd, ' ');
-	path = look_for_path(argv[0], envp);
+	if (argv[0][0] == '/')
+		path = argv[0];
+	else
+		path = look_for_path(argv[0], envp);
 	if (execve(path, argv, envp) == -1)
 	{
 		free_strs(argv);
-		free(path);
-		error_exit("zsh: command not found: ", cmd);
-		exit(EXIT_FAILURE);
+		if (argv[0][0] != '/')
+			free(path);
+		error_exit(strerror(errno), cmd);
+		exit(errno);
 	}
 }
 
 void	child_p(int fd, int *end, char *cmd, char **envp)
 {
+	if (fd < 0 || end[1] < 0)
+		exit (errno);
 	dup2(fd, STDIN_FILENO);
 	dup2(end[1], STDOUT_FILENO);
 	close (end[0]);
@@ -38,7 +44,7 @@ void	child_p(int fd, int *end, char *cmd, char **envp)
 	cmd_excev(cmd, envp);
 }
 
-void	last_child_p(int f1, int f2, char *cmd, char **envp)
+int	last_child_p(int f1, int f2, char *cmd, char **envp)
 {
 	pid_t	pid;
 
@@ -47,15 +53,21 @@ void	last_child_p(int f1, int f2, char *cmd, char **envp)
 		exit(-1);
 	if (!pid)
 	{
-		dup2(f2, STDOUT_FILENO);
-		dup2(f1, STDIN_FILENO);
+		if (f1 < 0 || f2 < 0)
+			exit (errno);
+		if (dup2(f2, STDOUT_FILENO) == -1)
+			exit(errno);
+		if (dup2(f1, STDIN_FILENO) == -1)
+			exit (errno);
 		close (f1);
 		close (f2);
 		cmd_excev(cmd, envp);
 	}
+	close (f1);
+	return (pid);
 }
 
-void	ft_pipex(char **av, char **envp, int f1, int f2)
+int	ft_pipex(char **av, char **envp, int f1, int f2)
 {
 	static int	i;
 	int			end[2];
@@ -66,46 +78,46 @@ void	ft_pipex(char **av, char **envp, int f1, int f2)
 	else if (!i)
 		i = 2;
 	if (pipe(end) == -1)
-		exit(-1);
+		exit(errno);
 	pid = fork();
 	if (pid < 0)
-		exit(-1);
+		exit(errno);
 	if (!pid)
 		child_p(f1, end, av[i], envp);
 	i++;
 	close(end[1]);
 	close(f1);
 	if (av[i + 2] == NULL)
-	{
-		last_child_p(end[0], f2, av[i], envp);
-		close (end[0]);
-	}
-	else
-		ft_pipex(av, envp, end[0], f2);
+		return (last_child_p(end[0], f2, av[i], envp));
+	ft_pipex(av, envp, end[0], f2);
+	return (0);
 }
 
 int	main(int ac, char *av[], char **envp)
 {
 	int	*fds;
-	int	fd;
+	int	pid;
+	int	status;
 
-	if (ac < 5)
+	if (ac < 5 || (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0
+			&& ac < 6))
 	{
 		ft_putendl_fd("invalid number of arguments", 2);
 		return (-1);
 	}
-	fds = ft_open(av, ac);
+	fds = ft_open(ac, av, envp);
 	if (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0)
 	{
 		close(fds[0]);
-		fd = open ("file", O_RDONLY);
-		ft_pipex(av, envp, fd, fds[1]);
+		fds[0] = open ("file", O_RDONLY);
 	}
-	else
-		ft_pipex(av, envp, fds[0], fds[1]);
+	pid = ft_pipex(av, envp, fds[0], fds[1]);
 	close(fds[1]);
 	free(fds);
-	wait(0);
 	unlink("file");
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	printf("here\n");
 	return (0);
 }

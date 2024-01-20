@@ -6,26 +6,38 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 11:04:13 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/14 15:09:04 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/20 20:46:30 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	print_sentence(char *str)
+void	print_pipe_here_doc(void)
 {
-	if (str[0] == '\n')
-		ft_putstr_fd("pipe heredoc> ", 1);
+	ft_putstr_fd("pipe heredoc> ", 1);
 }
 
 static int	f(char **buffer, char **tmp, char *limiter)
 {
+	int	j;
+
+	j = 0;
 	if (*buffer)
 	{
-		if (ft_strnstr(*buffer, limiter, ft_strlen(*buffer)) == 1)
+		while ((*buffer)[j])
 		{
-			free(*tmp);
-			return (1);
+			if ((*buffer)[j] == '\n' && ft_strncmp(&(*buffer)[j - 3]
+			, limiter, ft_strlen(limiter)) == 0)
+			{
+				if (j - 3 != 0 && (*buffer)[j - 4] != '\n')
+				{
+					j++;
+					continue ;
+				}
+				free(*tmp);
+				return (1);
+			}
+			j++;
 		}
 	}
 	return (-1);
@@ -53,7 +65,6 @@ static int	f1(char **buffer, char **tmp, int i)
 		*buffer = NULL;
 		return (1);
 	}
-	print_sentence(*tmp);
 	*buffer = ft_strjoin1(*buffer, *tmp, i);
 	if (!(*buffer))
 		return (0);
@@ -89,8 +100,8 @@ char	*get_next_line(int fd, char *limiter)
 		i = f(&buffer[fd], &tmp, limiter);
 		if (i == 1)
 			return (buffer[fd]);
-		else if (i == 0)
-			return (NULL);
+		if (buffer[fd] && buffer[fd][ft_strlen(buffer[fd]) - 1] == '\n')
+			print_pipe_here_doc();
 		i = read(fd, tmp, BUFFER_SIZE);
 		if (i == 0 && !buffer[fd])
 		{

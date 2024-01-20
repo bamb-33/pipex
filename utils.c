@@ -6,7 +6,7 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:09:29 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/16 19:40:13 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/20 15:41:59 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,19 @@ void	error_exit(char *error, char *var)
 	ft_putendl_fd(var, 2);
 }
 
-int	*ft_open(char **av, int ac)
+int	*ft_open(int ac, char **av, char **envp)
 {
 	int		*fds;
 	char	*input;
 
 	fds = (int *) malloc (sizeof(int) * 2);
+	if (!fds)
+		exit(errno);
 	if (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0)
 	{
-		if (ac < 6)
-		{
-			ft_putendl_fd("invalid number of arguments", 2);
-			exit(EXIT_FAILURE);
-		}
 		fds[0] = open ("file", O_CREAT | O_RDWR, 0644);
 		write(1, "pipe heredoc> ", 14);
-		input = get_next_line(0, av[2]);
+		input = check_for_vars(get_next_line(0, av[2]), envp);
 		write(fds[0], input, ft_strlen(input) - ft_strlen(av[2]));
 		free (input);
 		fds[1] = open (av[ac - 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
@@ -65,36 +62,36 @@ int	*ft_open(char **av, int ac)
 	return (fds);
 }
 
-char	**ft_getenv(char **envp)
+char	*ft_getenv(char *arg, char **envp)
 {
-	char	**paths;
 	char	*str;
 	int		i;
 
 	i = 0;
-	paths = NULL;
+	str = NULL;
 	while (envp[i])
 	{
-		if (ft_strnstr(envp[i], "PATH", ft_strlen(envp[i])) == 1)
+		if (ft_strnstr(envp[i], arg, ft_strlen(envp[i])) == 1)
 		{
-			str = ft_substr(envp[i], 5, ft_strlen(envp[i]));
-			paths = ft_split(str, ':');
-			free (str);
+			str = ft_substr(envp[i], ft_strlen(arg) + 1, ft_strlen(envp[i]));
 			break ;
 		}
 		i++;
 	}
-	return (paths);
+	return (str);
 }
 
 char	*look_for_path(char *cmd, char **envp)
 {
 	int		i;
 	char	**paths;
+	char	*str;
 	char	*cmd_exec;
 
 	i = 0;
-	paths = ft_getenv(envp);
+	str = ft_getenv("PATH", envp);
+	paths = ft_split(str, ':');
+	free(str);
 	while (paths[i])
 	{
 		cmd_exec = ft_strjoin(paths[i], cmd, '/');

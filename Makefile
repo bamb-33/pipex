@@ -29,7 +29,7 @@ $(NAME): $(OBJ_LIBFT) $(SRC)
 	$(CC) $(CFLAGS) $(SRC) $(LIBFT) -o $(NAME)
 
 $(BONUS): $(OBJ_LIBFT) $(SRC_B)
-	$(CC) $(CFLAGS) $(SRC_B) $(LIBFT) -o $(BONUS)
+	$(CC) $(CFLAGS) $(SRC_B) $(LIBFT) -o $(NAME)
 
 %.o: %.c
 	$(MAKE) -C libft
