@@ -6,11 +6,48 @@
 /*   By: naadou <naadou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:39:19 by naadou            #+#    #+#             */
-/*   Updated: 2024/01/18 19:46:43 by naadou           ###   ########.fr       */
+/*   Updated: 2024/01/22 20:34:07 by naadou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "header.h"
+
+int	strs_len(char **av)
+{
+	int	i;
+
+	i = 0;
+	while (av[i])
+		i++;
+	if (ft_strncmp(av[1], "here_doc", ft_strlen("here_doc")) == 0)
+		i -= 4;
+	else
+		i -= 3;
+	return (i);
+}
+
+int	wait_for_p(int *pid, char **av)
+{
+	int	status;
+	int	i;
+
+	i = strs_len(av) - 1;
+	status = 0;
+	while (i >= 0)
+	{
+		waitpid(pid[i], &status, 0);
+		if (WIFEXITED(status))
+		{
+			status = WEXITSTATUS(status);
+			break ;
+		}
+		i--;
+	}
+	while (i >= 0)
+		waitpid(pid[--i], 0, 0);
+	free(pid);
+	return (status);
+}
 
 char	*replace_var(char *env_var, char *var, char *str, int index)
 {

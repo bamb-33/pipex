@@ -10,36 +10,29 @@ SRC_LIBFT = libft/ft_isalpha.c libft/ft_isdigit.c libft/ft_isalnum.c libft/ft_is
 	   libft/ft_memcmp.c libft/ft_memchr.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_striteri.c \
 	   libft/get_next_line_utils.c libft/get_next_line.c
 
-SRC = mandatory/pipex.c utils.c utils2.c
+SRC = pipex.c
 
-SRC_B = bonus/pipex_bonus.c utils.c utils2.c
+SRC_UTILS = utils.c utils2.c
 
 OBJ = $(SRC:.c=.o)
-OBJ_B = $(SRC_B:.c=.o)
 OBJ_LIBFT = $(SRC_LIBFT:.c=.o)
 LIBFT = libft/libft.a
 NAME = pipex
-BONUS = pipex_b
 
 all: $(NAME)
 
-bonus: $(BONUS)
-
-$(NAME): $(OBJ_LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $(SRC) $(LIBFT) -o $(NAME)
-
-$(BONUS): $(OBJ_LIBFT) $(SRC_B)
-	$(CC) $(CFLAGS) $(SRC_B) $(LIBFT) -o $(NAME)
+$(NAME): $(OBJ_LIBFT) $(SRC) $(SRC_UTILS)
+	$(CC) $(CFLAGS) $(SRC) $(SRC_UTILS) $(LIBFT) -o $(NAME)
 
 %.o: %.c
 	$(MAKE) -C libft
 
 clean:
-	rm -f $(OBJ) $(OBJ_B)
+	rm -f $(OBJ)
 	$(MAKE) -C libft clean
 
 fclean: clean
-	rm -f $(NAME) $(BONUS)
+	rm -f $(NAME)
 	$(MAKE) -C libft fclean
 
 re: fclean all
